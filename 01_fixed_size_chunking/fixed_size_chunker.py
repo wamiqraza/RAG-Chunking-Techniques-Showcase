@@ -1,8 +1,3 @@
-"""
-Fixed-Size Chunking Implementation
-A simple but effective approach for splitting text into fixed-size chunks with optional overlap.
-"""
-
 import time
 import psutil
 import os
@@ -81,7 +76,8 @@ class FixedSizeChunker:
             # If this is not the last chunk, try to find a good break point
             if end < len(text):
                 # Look for separator within the last 10% of the chunk
-                search_start = max(start + int(0.9 * self.chunk_size), start + 1)
+                search_start = max(
+                    start + int(0.9 * self.chunk_size), start + 1)
                 separator_pos = text.rfind(self.separator, search_start, end)
 
                 if separator_pos != -1:
@@ -142,11 +138,13 @@ class FixedSizeChunker:
             avg_size = statistics.mean(chunk_sizes)
             min_size = min(chunk_sizes)
             max_size = max(chunk_sizes)
-            std_dev = statistics.stdev(chunk_sizes) if len(chunk_sizes) > 1 else 0.0
+            std_dev = statistics.stdev(chunk_sizes) if len(
+                chunk_sizes) > 1 else 0.0
 
             # Calculate overlap ratio
             total_chunk_chars = sum(chunk_sizes)
-            overlap_ratio = (total_chunk_chars - len(text)) / len(text) if len(text) > 0 else 0.0
+            overlap_ratio = (total_chunk_chars - len(text)) / \
+                len(text) if len(text) > 0 else 0.0
         else:
             avg_size = min_size = max_size = std_dev = overlap_ratio = 0.0
 
@@ -182,7 +180,7 @@ class FixedSizeChunker:
             "chunk_sizes": [len(chunk) for chunk in chunks],
             "word_counts": [len(chunk.split()) for chunk in chunks],
             "sentence_counts": [chunk.count('.') + chunk.count('!') + chunk.count('?')
-                              for chunk in chunks],
+                                for chunk in chunks],
         }
 
         # Calculate size statistics

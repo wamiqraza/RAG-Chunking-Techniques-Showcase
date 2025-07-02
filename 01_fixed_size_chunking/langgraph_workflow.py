@@ -1,8 +1,3 @@
-"""
-LangGraph workflow for Fixed-Size Chunking with OpenAI integration.
-Demonstrates a complete RAG pipeline with chunking, embedding, and retrieval.
-"""
-
 import os
 from typing import List, Dict, Any, Optional
 from dataclasses import dataclass

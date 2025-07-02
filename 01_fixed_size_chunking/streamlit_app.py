@@ -1,8 +1,3 @@
-"""
-Streamlit app for Fixed-Size Chunking demonstration.
-Interactive interface to explore fixed-size chunking parameters and visualize results.
-"""
-
 import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
