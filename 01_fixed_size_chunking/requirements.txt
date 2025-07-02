@@ -1,0 +1,10 @@
+streamlit
+plotly
+pandas
+PyPDF2
+psutil
+openai
+langgraph
+scikit-learn
+numpy
+typing-extensions
