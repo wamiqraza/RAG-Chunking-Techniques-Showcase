@@ -8,7 +8,7 @@ import statistics
 from enum import Enum
 
 
-class DocumentElement(Enum):
+class ElementType(Enum):
     """Types of document elements for structured chunking."""
     HEADER = "header"
     PARAGRAPH = "paragraph"
@@ -23,7 +23,7 @@ class DocumentElement(Enum):
 @dataclass
 class DocumentElement:
     """Represents a structural element in a document."""
-    element_type: DocumentElement
+    element_type: ElementType
     content: str
     level: int = 0
     metadata: Dict[str, Any] = None
@@ -162,11 +162,11 @@ class DocumentBasedChunker:
                 if in_code_block:
                     # End of code block
                     if code_block_content:
-                        elements.append(DocumentElement(
-                            element_type=DocumentElement.CODE_BLOCK,
-                            content='\n'.join(code_block_content),
-                            level=0
-                        ))
+                                            elements.append(DocumentElement(
+                        element_type=ElementType.CODE_BLOCK,
+                        content='\n'.join(code_block_content),
+                        level=0
+                    ))
                     code_block_content = []
                     in_code_block = False
                 else:
@@ -184,7 +184,7 @@ class DocumentBasedChunker:
                 # Flush current paragraph
                 if current_paragraph:
                     elements.append(DocumentElement(
-                        element_type=DocumentElement.PARAGRAPH,
+                        element_type=ElementType.PARAGRAPH,
                         content='\n'.join(current_paragraph),
                         level=0
                     ))
@@ -192,7 +192,7 @@ class DocumentBasedChunker:
 
                 level, header_text = header_match
                 elements.append(DocumentElement(
-                    element_type=DocumentElement.HEADER,
+                    element_type=ElementType.HEADER,
                     content=header_text,
                     level=level,
                     metadata={'header_level': level}
@@ -204,14 +204,14 @@ class DocumentBasedChunker:
                 # Flush current paragraph
                 if current_paragraph:
                     elements.append(DocumentElement(
-                        element_type=DocumentElement.PARAGRAPH,
+                        element_type=ElementType.PARAGRAPH,
                         content='\n'.join(current_paragraph),
                         level=0
                     ))
                     current_paragraph = []
 
                 elements.append(DocumentElement(
-                    element_type=DocumentElement.LIST_ITEM,
+                    element_type=ElementType.LIST_ITEM,
                     content=line,
                     level=0
                 ))
@@ -222,14 +222,14 @@ class DocumentBasedChunker:
                 # Flush current paragraph
                 if current_paragraph:
                     elements.append(DocumentElement(
-                        element_type=DocumentElement.PARAGRAPH,
+                        element_type=ElementType.PARAGRAPH,
                         content='\n'.join(current_paragraph),
                         level=0
                     ))
                     current_paragraph = []
 
                 elements.append(DocumentElement(
-                    element_type=DocumentElement.TABLE,
+                    element_type=ElementType.TABLE,
                     content=line,
                     level=0
                 ))
@@ -240,14 +240,14 @@ class DocumentBasedChunker:
                 # Flush current paragraph
                 if current_paragraph:
                     elements.append(DocumentElement(
-                        element_type=DocumentElement.PARAGRAPH,
+                        element_type=ElementType.PARAGRAPH,
                         content='\n'.join(current_paragraph),
                         level=0
                     ))
                     current_paragraph = []
 
                 elements.append(DocumentElement(
-                    element_type=DocumentElement.QUOTE,
+                    element_type=ElementType.QUOTE,
                     content=line,
                     level=0
                 ))
@@ -257,7 +257,7 @@ class DocumentBasedChunker:
             if not line.strip():
                 if current_paragraph:
                     elements.append(DocumentElement(
-                        element_type=DocumentElement.PARAGRAPH,
+                        element_type=ElementType.PARAGRAPH,
                         content='\n'.join(current_paragraph),
                         level=0
                     ))
@@ -268,7 +268,7 @@ class DocumentBasedChunker:
         # Flush remaining paragraph
         if current_paragraph:
             elements.append(DocumentElement(
-                element_type=DocumentElement.PARAGRAPH,
+                element_type=ElementType.PARAGRAPH,
                 content='\n'.join(current_paragraph),
                 level=0
             ))
@@ -373,7 +373,7 @@ class DocumentBasedChunker:
         combined = []
         
         for element in elements:
-            if element.element_type == DocumentElement.HEADER and self.preserve_headers:
+            if element.element_type == ElementType.HEADER and self.preserve_headers:
                 # Add header with appropriate formatting
                 header_level = element.metadata.get('header_level', 1)
                 header_marker = '#' * header_level
